@@ -1,30 +1,22 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shopping_app_flutter/components/home_screen_cmp.dart';
-import 'package:shopping_app_flutter/models/product_model.dart';
+import 'package:shopping_app_flutter/provider/product_provider.dart';
 import 'package:shopping_app_flutter/screens/cart_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentPage = 0;
-  List<Widget> screens = const [HomeScreenCmp(), CartScreen()];
+  final List<Widget> screens = const [HomeScreenCmp(), CartScreen()];
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
+
     return Scaffold(
-      body: screens[currentPage],
+      body: screens[productProvider.currentPage],
       bottomNavigationBar: BottomNavigationBar(
           onTap: (value) {
-            setState(() {
-              currentPage = value;
-            });
+            productProvider.setCurrentPage(value);
           },
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),

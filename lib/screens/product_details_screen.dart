@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app_flutter/models/product_model.dart';
+import 'package:shopping_app_flutter/provider/cart_items_provider.dart';
+import 'package:shopping_app_flutter/provider/product_provider.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key, required this.product});
+class ProductDetailsScreen extends StatelessWidget {
+  const ProductDetailsScreen({super.key});
 
-  final Product product;
-
-  @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-}
-
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    final cartItemsProvider = Provider.of<CartItemsProvider>(context,listen: false);
+    final productProvider = Provider.of<ProductProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -29,7 +28,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               width: double.infinity,
               height: 250,
               child: Image.network(
-                widget.product.image,
+                productProvider.product.image,
                 width: 50,
                 height: 50,
                 fit: BoxFit.fill,
@@ -43,7 +42,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cartItemsProvider.addProductIntoCart(productProvider.product);
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow,
                       textStyle: const TextStyle(
